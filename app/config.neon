@@ -1,0 +1,17 @@
+
+parameters:
+    timezone: Europe/Berlin
+    tempDir: %appDir%/../temp
+
+php:
+    date.timezone: %timezone%
+
+application:
+    scanDirs: false
+    errorPresenter: Error
+    mapping:
+        *: App\*Module\*Presenter
+
+services:
+    router: App\RouterFactory::createRouter
+    class: My\FatClass()

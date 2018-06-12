@@ -1,0 +1,23 @@
+{
+    "name": "dadyday/skeleton",
+
+    "scripts": {
+        "test": "\"./vendor/bin/tester\" -C tests",
+        "cover": "\"./vendor/bin/tester\" -C tests --coverage coverage.html --coverage-src src"
+    },
+    "autoload": {
+        "psr-4": {
+            "My\\": "src/",
+            "App\\": "app/"
+        }
+    },
+    "require": {
+        "nette/bootstrap": "^2.4",
+        "tracy/tracy": "^2.4",
+        "nette/application": "^2.4",
+        "latte/latte": "^2.4"
+    },
+    "require-dev": {
+        "Nette/Tester": "^2.0"
+    }
+}
