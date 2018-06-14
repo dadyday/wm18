@@ -6,12 +6,14 @@ use Exception;
 class Countries extends \ArrayObject {
 
     static $configFile;
-    static function factory($configFile): Countries {
+
+	/** @return \My\Countries */
+    static function factory($configFile) {
         static::$configFile = $configFile;
         return static::instance();
     }
 
-    static function instance(): Countries {
+    static function instance() {
         static $oInst = null;
         if (is_null($oInst)) $oInst = new static();
         return $oInst;
@@ -26,7 +28,7 @@ class Countries extends \ArrayObject {
         $aList = [];
 
     function __construct() {
-        if (!static::$configFile) throw new Exception('Country::$configFile is not set');
+        if (!static::$configFile) throw new Exception('Countries::$configFile is not set');
         if (!file_exists(static::$configFile)) throw new Exception(static::$configFile." not found");
 
         $oData = new Data();

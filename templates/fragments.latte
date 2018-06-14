@@ -25,6 +25,8 @@
         <td style="width:8rem">{include #team, $oMatch->oTeam1}</td>
         <td style="width:1rem">vs.</td>
         <td style="width:8rem">{include #team, $oMatch->oTeam2, true}</td>
+        <td>&nbsp;</td>
+        <td>{include #matchCol, $oMatch->oTeam1, $oMatch->oTeam2}</td>
     </tr>
 
 {/define}
@@ -41,4 +43,50 @@
 
 {define country, $oCountry}
     <span class="flag-icon flag-icon-{$oCountry->code}"></span>
+{/define}
+
+
+{define winBar, $win, $tie, $loss}
+
+    {var $a = $win + $tie + $loss}
+    {var $w = min(max(round($win/$a * 100), 1), 98)}
+    {var $l = min(max(round($loss/$a * 100), 1), 98)}
+    {var $t = 100 -$w -$l}
+    <div style="line-height: 4px; width: 100%; display: inline-block;">
+        <div style="float: left; background-color: green; width: {$w}%">&nbsp;</div>
+        <div style="float: left; background-color: yellow; width: {$t}%">&nbsp;</div>
+        <div style="float: left; background-color: red; width: {$l}%">&nbsp;</div>
+    </div>
+{/define}
+
+{define goalBar, $goal, $anti}
+    {var $g = min(max(round($goal/5 * 100), 1), 99)}
+    {var $a = min(max(round($anti/5 * 100), 1), 99)}
+    {var $n = 100 - $a - $g}
+    <div style="line-height: 4px; width: 100%; display: inline-block;">
+        <div style="float: left; background-color: #8f8; width: {$g}%">&nbsp;</div>
+        <div style="float: left; width: {$n}%">&nbsp;</div>
+            <div style="float: left; background-color: #f88; width: {$a}%">&nbsp;</div>
+    </div>
+{/define}
+
+{define teamCol, $oTeam}
+	<div class="bar">
+		{$oTeam->name}
+		<div class="bars">
+			{include #winBar, $oTeam->wins, $oTeam->ties, $oTeam->lost}
+			{include #goalBar, $oTeam->goal, $oTeam->anti}
+		</div>
+	</div>
+{/define}
+
+{define matchCol, $oTeam1, $oTeam2}
+	{var $oComp = \My\Compare::create($oTeam1, $oTeam2)}
+	<div class="bar">
+		{$oComp->result[0]} : {$oComp->result[1]}
+		<div class="bars">
+			{include #winBar, $oComp->wins, $oComp->ties, $oComp->lost}
+			{include #goalBar, $oComp->goal, $oComp->anti}
+		</div>
+	</div>
 {/define}

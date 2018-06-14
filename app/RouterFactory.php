@@ -8,10 +8,8 @@ use Nette\Application\Routers\RouteList;
 class RouterFactory {
     use Nette\StaticClass;
 
-    /**
-     * @return Nette\Application\Routers\RouteList;
-     */
-    public static function createRouter(): RouteList {
+    /** @return \Nette\Application\Routers\RouteList */
+    public static function createRouter() {
         $router = new RouteList;
         $router[] = new Route('<presenter>/<action>', 'Home:default');
         return $router;

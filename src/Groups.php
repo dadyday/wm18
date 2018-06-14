@@ -8,7 +8,8 @@ class Groups extends \ArrayObject {
     static
         $configFile = null;
 
-    static function factory($configFile): Groups {
+    /** @return \My\Groups */
+    static function factory($configFile) {
         static::$configFile = $configFile;
         return new static();
     }
@@ -57,19 +58,5 @@ class Group {
 
     function getMatches() {
         return $this->oMatches;
-    }
-
-    function getHtml() {
-        $matches = '';
-        foreach ($this->oMatches as $oMatch) {
-            $matches .= $oMatch->rowHtml;
-        }
-        return "<div>
-            $this->name
-            <table>
-
-                $matches
-            </table>
-            </div>";
     }
 }

@@ -6,7 +6,7 @@ use DateTime;
 
 class Matches extends \ArrayObject {
 
-    static function create($oGroup, $aData): Matches {
+    static function create($oGroup, $aData) {
         return new static($oGroup, $aData);
     }
 
@@ -37,14 +37,5 @@ class Match {
         $this->oTeam1 = Teams::getByName($aData[0]);
         $this->oTeam2 = Teams::getByName($aData[1]);
         $this->time = new DateTime($aData[2]);
-    }
-
-    function getRowHtml() {
-
-        return "<tr>
-            <td>{$this->oTeam1->html}</td>
-            <td> vs. </td>
-            <td>{$this->oTeam2->html}</td>
-            </tr>";
     }
 }

@@ -66,6 +66,33 @@ return [
         ['Japan', 'Polen', '2018-06-28 16:00'],
     ],
     'AF' => [
+        ['Frankreich', 'Island', '2018-06-30 16:00'],
+        ['Russland', 'Portugal', '2018-06-30 20:00'],
+        ['Spanien', 'Saudi Arabien', '2018-07-01 16:00'],
+        ['Kroatien', 'Dänemark', '2018-07-01 20:00'],
+        ['Brasilien', 'Schweden', '2018-07-02 16:00'],
+        ['Belgien', 'Senegal', '2018-07-02 20:00'],
+        ['Deutschland', 'Schweiz', '2018-07-03 16:00'],
+        ['Polen', 'England', '2018-07-03 20:00'],
+    ],
+    'VF' => [
+        ['Frankreich', 'Portugal', '2018-07-06 16:00'],
+        ['Belgien', 'Schweden', '2018-07-06 20:00'],
+        ['England', 'Deutschland', '2018-07-07 16:00'],
+        ['Spanien', 'Dänemark', '2018-07-07 20:00'],
+    ],
+    'HF' => [
+        ['Belgien', 'Portugal', '2018-07-10 20:00'],
+        ['Spanien', 'Deutschland', '2018-07-11 20:00'],
+    ],
+    'Spiel um Platz 3' => [
+        ['Portugal', 'Spanien', '2018-07-14 16:00'],
+    ],
+    'Finale' => [
+        ['Belgien', 'Deutschland', '2018-07-15 17:00'],
+    ],
+/*
+    'AF' => [
         ['Sieger C', 'Zweiter D', '2018-06-30 16:00'],
         ['Sieger A', 'Zweiter B', '2018-06-30 20:00'],
         ['Sieger B', 'Zweiter A', '2018-07-01 16:00'],
@@ -91,5 +118,6 @@ return [
     'Finale' => [
         ['Sieger HF 1', 'Sieger HF 2', '2018-07-15 17:00'],
     ],
+ */
 
 ];

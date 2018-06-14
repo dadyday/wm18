@@ -5,6 +5,7 @@ parameters:
     dataDir: %appDir%/data
     countryCfg: %dataDir%/countries.csv
     groupCfg: %dataDir%/groups.php
+    teamCfg: %dataDir%/scores.php
 
 php:
     date.timezone: %timezone%
@@ -18,5 +19,5 @@ application:
 services:
     router: App\RouterFactory::createRouter
     countries: My\Countries::factory(%countryCfg%)
-
+    teams: My\Teams::factory(%teamCfg%)
     groups: My\Groups::factory(%groupCfg%)

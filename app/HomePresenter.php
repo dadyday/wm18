@@ -7,6 +7,8 @@ class HomePresenter extends Nette\Application\UI\Presenter {
 
     /** @var \My\Countries @inject */
     public $oCountries;
+    /** @var \My\Teams @inject */
+    public $oTeams;
     /** @var \My\Groups @inject */
     public $oGroups;
 
@@ -38,8 +40,11 @@ class HomePresenter extends Nette\Application\UI\Presenter {
         $this->template->oMatches = $oMatches;
     }
 
+    function actionTeams() {
+        $this->template->oTeams = $this->oTeams;
+    }
+
     function renderDefault() {
         $this->template->countries = $this->oCountries;
-        $this->template->oGroups = $this->oGroups;
     }
 }
