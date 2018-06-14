@@ -1,6 +1,11 @@
+{import 'fragments.latte'}
+
 {block content}
 {php echo rand(0, 100000)}
 <div n:snippet="hello">
+    <span class="flag-icon-de"></span>
     Hello {$hello}! Here we are ...
 </div>
+<span class="flag-icon flag-icon-de"></span>
 <a n:href="click!">click</a>
+<hr>

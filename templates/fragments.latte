@@ -1,0 +1,44 @@
+{define groupRows, $oGroups}
+
+    {foreach $oGroups as $oGroup}
+        <tr>
+            <td></td>
+            <th colspan="3">{$oGroup->name}</th>
+        </tr>
+        {include #matchRows, $oGroup->oMatches}
+    {/foreach}
+
+{/define}
+
+{define matchRows, $oMatches}
+
+    {foreach $oMatches as $oMatch}
+        {include #matchRow, $oMatch}
+    {/foreach}
+
+{/define}
+
+{define matchRow, $oMatch}
+
+    <tr>
+        <td style="width:8rem">{$oMatch->time|date:"D, d.m H:i"}</td>
+        <td style="width:8rem">{include #team, $oMatch->oTeam1}</td>
+        <td style="width:1rem">vs.</td>
+        <td style="width:8rem">{include #team, $oMatch->oTeam2, true}</td>
+    </tr>
+
+{/define}
+
+{define team, $oTeam, $right}
+
+    <div style="text-align: {$right ? 'left' : 'right'}">
+        {if $right}{include #country, $oTeam->oCountry}{/if}
+        <span>{$oTeam->name}</span>
+        {if !$right}{include #country, $oTeam->oCountry}{/if}
+    </div>
+
+{/define}
+
+{define country, $oCountry}
+    <span class="flag-icon flag-icon-{$oCountry->code}"></span>
+{/define}
