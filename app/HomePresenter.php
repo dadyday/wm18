@@ -5,12 +5,8 @@ use Nette;
 
 class HomePresenter extends Nette\Application\UI\Presenter {
 
-    /** @var \My\Countries @inject */
-    public $oCountries;
-    /** @var \My\Teams @inject */
-    public $oTeams;
-    /** @var \My\Groups @inject */
-    public $oGroups;
+    /** @var \Nette\DI\Container @inject */
+    public $oContainer;
 
 
     function actionDefault() {
@@ -23,12 +19,14 @@ class HomePresenter extends Nette\Application\UI\Presenter {
     }
 
     function actionGroups() {
-        $this->template->oGroups = $this->oGroups;
+        $this->template->oGroups = $this->oContainer->getByType(\My\Groups::class);
     }
 
     function actionMatches() {
+        $oGroups = $this->oContainer->getByType(\My\Groups::class);
+
         $oMatches = [];
-        foreach ($this->oGroups as $oGroup) {
+        foreach ($oGroups as $oGroup) {
             foreach ($oGroup->oMatches as $oMatch) {
                 $oMatches[] = $oMatch;
             }
@@ -41,10 +39,10 @@ class HomePresenter extends Nette\Application\UI\Presenter {
     }
 
     function actionTeams() {
-        $this->template->oTeams = $this->oTeams;
+        $this->template->oTeams = $this->oContainer->getByType(\My\Teams::class);
     }
 
     function renderDefault() {
-        $this->template->countries = $this->oCountries;
+        #$this->template->countries = $this->oCountries;
     }
 }

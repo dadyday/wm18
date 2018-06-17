@@ -50,7 +50,7 @@ class Data {
         $aResult = [];
         $header = $data = fgetcsv($handle, 1000, ";");
         while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-            if ($data) $aResult[] = $data;
+            if ($data) $aResult[] = array_combine($header, $data);
         }
         fclose($handle);
         #bdump($aResult);

@@ -7,7 +7,7 @@ class Countries extends \ArrayObject {
 
     static $configFile;
 
-	/** @return \My\Countries */
+    /** @return \My\Countries */
     static function factory($configFile) {
         static::$configFile = $configFile;
         return static::instance();
@@ -35,8 +35,9 @@ class Countries extends \ArrayObject {
         $aList = [];
 
         foreach ($oData->load(static::$configFile) as $aData) {
-            $code = strtolower($aData[0]);
-            $aList[$code]= new Country($code, $aData[2]);
+            $code = strtolower($aData['code']);
+            $name = strtolower($aData['de']);
+            $aList[$code]= new Country($code, $name);
         }
         parent::__construct($aList);
     }
