@@ -1,22 +1,9 @@
 {import 'fragments.latte'}
 
 {block content}
-	<table>
-		<tr>
-			<th></th>
-			<th n:foreach="$oTeams as $oTeam">
-				{dump $oTeam}
-				{include #teamCol, $oTeam}
-			</th>
-		</tr>
-		<tr n:foreach="$oTeams as $oTeam2">
-			<th>
-				{include #teamCol, $oTeam2}
-			</th>
-			<td n:foreach="$oTeams as $oTeam">
-				{if $oTeam2 !== $oTeam}
-					{include #matchCol, $oTeam2, $oTeam}
-				{/if}
-			</td>
-		</tr>
-	</table>
+
+<ul n:foreach="$teams as $team">
+    <li style="width:200px;">
+        {include #team, $team, 'right'}
+    </li>
+</ul>

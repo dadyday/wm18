@@ -3,34 +3,31 @@ namespace My;
 
 class Data {
 
-    function __construct() {
-    }
-
-    function load($data, $format = null, $type = null) {
-        if (is_null($type)) $type = $this->getDataType($data);
+    static function load($data, $format = null, $type = null) {
+        if (is_null($type)) $type = static::getDataType($data);
 
         switch ($type) {
             case 'file':
-                return $this->loadFile($data, $format);
+                return static::loadFile($data, $format);
             case 'url':
                 $data = file_get_contents($data);
             case 'string':
-                return $this->loadString($data, $format);
+                return static::loadString($data, $format);
         }
     }
 
-    function getDataType($string) {
+    static function getDataType($string) {
         if (is_file($string)) return 'file';
         if (filter_var($string, FILTER_VALIDATE_URL)) return 'url';
         return 'string';
     }
 
-    function loadFile($file, $format= null) {
-        if (is_null($format)) $format = $this->getFileFormat($file);
+    static function loadFile($file, $format= null) {
+        if (is_null($format)) $format = static::getFileFormat($file);
 
         switch ($format) {
             case 'csv':
-                return $this->loadCsvFile($file);
+                return static::loadCsvFile($file);
             case 'php':
                 return include($file);
             default:
@@ -38,19 +35,19 @@ class Data {
         }
     }
 
-    function getFileFormat($file) {
+    static function getFileFormat($file) {
         $oInfo = new \SplFileInfo($file);
         return $oInfo->getExtension();
     }
 
-    function loadCsvFile($file) {
+    static function loadCsvFile($file) {
         $handle = fopen($file, "r");
         if (!$handle) throw new Exception('open csv file failed');
 
         $aResult = [];
         $header = $data = fgetcsv($handle, 1000, ";");
         while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-            if ($data) $aResult[] = $data;
+            if ($data) $aResult[] = array_combine($header, $data);
         }
         fclose($handle);
         #bdump($aResult);
@@ -58,8 +55,8 @@ class Data {
         return $aResult;
     }
 
-    function loadString($data, $format= null) {
-        if (is_null($format)) $format = $this->getStringFormat($data);
+    static function loadString($data, $format= null) {
+        if (is_null($format)) $format = static::getStringFormat($data);
 
         switch ($format) {
             default:
@@ -67,7 +64,7 @@ class Data {
         }
     }
 
-    function getStringFormat($data) {
+    static function getStringFormat($data) {
         if (preg_match('~^<\?php.*~', $data)) return 'php';
         throw new \Exception('data string format not found');
     }

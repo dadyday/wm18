@@ -2,41 +2,33 @@
 namespace My;
 
 use Exception;
+use Nette;
 
-class Groups extends \ArrayObject {
+class Groups extends Repo {
 
-    static
-        $configFile = null;
+    static $oInst;
 
     /** @return \My\Groups */
     static function factory($configFile) {
-        static::$configFile = $configFile;
-        return new static();
+        return parent::factory($configFile);
     }
 
-    function __construct() {
-        if (!static::$configFile) throw new Exception('Groups::$configFile is not set');
-        if (!file_exists(static::$configFile)) throw new Exception(static::$configFile." not found");
-        $aData = include(static::$configFile);
-        $aList = [];
-        foreach ($aData as $code => $name) {
-            $aList[$code]= new Group($code, $name);
-        }
-        parent::__construct($aList);
+    /** @var \My\Matches $oMatches @inject */
+    public $oMatches;
+
+    function loadData(&$aList, $key, $data) {
+        $aList[$key]= new Group($key, $data);
     }
 }
-
 /**
- * @property-read string $html
- * @property-read \ArrayObject $matches
+ * @property-read array $matches
  */
 class Group {
     use \Nette\SmartObject;
 
     public
         $id,
-        $name,
-        $oMatches;
+        $name;
 
     function __construct($id, $data) {
         $this->id = $id;
@@ -53,10 +45,10 @@ class Group {
         else {
             $this->name = $id;
         }
-        $this->oMatches = Matches::create($this, $data);
     }
 
     function getMatches() {
-        return $this->oMatches;
+        $oMatches = Matches::findByProperty('group', $this->id);
+        return $oMatches;
     }
 }

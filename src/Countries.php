@@ -3,49 +3,25 @@ namespace My;
 
 use Exception;
 
-class Countries extends \ArrayObject {
 
-    static $configFile;
+class Countries extends Repo {
+    static $oInst;
 
-	/** @return \My\Countries */
+    /** @return \My\Countries */
     static function factory($configFile) {
-        static::$configFile = $configFile;
-        return static::instance();
+        return parent::factory($configFile);
     }
 
-    static function instance() {
-        static $oInst = null;
-        if (is_null($oInst)) $oInst = new static();
-        return $oInst;
-    }
-
-    static function __callStatic($name, $args) {
-        $oInst = static::instance();
-        return call_user_func_array([$oInst, '_'.$name], $args);
-    }
-
-    protected
-        $aList = [];
-
-    function __construct() {
-        if (!static::$configFile) throw new Exception('Countries::$configFile is not set');
-        if (!file_exists(static::$configFile)) throw new Exception(static::$configFile." not found");
-
-        $oData = new Data();
-        $aList = [];
-
-        foreach ($oData->load(static::$configFile) as $aData) {
-            $code = strtolower($aData[0]);
-            $aList[$code]= new Country($code, $aData[2]);
-        }
-        parent::__construct($aList);
+    function loadData(&$aList, $key, $aData) {
+        $code = strtolower($aData['code']);
+        $name = $aData['de'];
+        $aList[$code]= new Country($code, $name);
     }
 
     protected function _getByName($name) {
-        foreach ($this as $code => $oCountry) {
-            if ($oCountry->name == $name) return $oCountry;
-        }
-        return null;
+        $oItem = $this->getByProperty('name', $name);
+        if (is_null($oItem)) throw new \UnexpectedValueException("country $name not found");
+        return $oItem;
     }
 }
 
