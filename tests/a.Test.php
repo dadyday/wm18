@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/cfg.php';
 
 use Tester\Assert as Is;
 
@@ -10,8 +10,15 @@ $oDi = require __DIR__.'/../app/bootstrap.php';
 
 Is::type('\Nette\DI\Container', $oDi);
 
-$o = $oDi->getService('class');
-Is::type(\My\FatClass::class, $o);
+$o = $oDi->getService('groups');
+Is::type(\My\Groups::class, $o);
 
-$o = new \My\Own\AnotherClass();
-Is::type(\My\Own\AnotherClass::class, $o);
+$m = $oDi->getService('matches');
+Is::type(\My\Matches::class, $m);
+
+$o = $o->getByKey('A');
+Is::type(\My\Group::class, $o);
+$m = $o->matches;
+dump($m);
+Is::type('array', $m);
+Is::type(\My\Match::class, current($m));

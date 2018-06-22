@@ -4,38 +4,62 @@ namespace My;
 use Exception;
 use DateTime;
 
-class Matches extends \ArrayObject {
+class Matches extends Repo {
+    static $oInst;
 
-    static function create($oGroup, $aData) {
-        return new static($oGroup, $aData);
+    /** @return \My\Matches */
+    static function factory($configFile) {
+        return parent::factory($configFile);
     }
 
-    function __construct($oGroup, $aData) {
-        $aList = [];
-        foreach ($aData as $i => $aData) {
-            $id = $oGroup->id.($i+1);
-            $aList[$id] = new Match($id, $aData);
+    /** @var \My\Teams @inject */
+    public $oTeams;
+
+    function loadData(&$aList, $key, $aData) {
+        #bdump($aData, 'matches'.$key);
+        foreach ($aData as $i => $aMatch) {
+            $id = $key.($i+1);
+            $aList[$id] = new Match($id, $key, $aMatch);
         }
-        parent::__construct($aList);
+    }
+
+    function getForDay($date) {
+        $date = $date->format('Ymd');
+        $aRet = [];
+        foreach ($this->aList as $oItem) {
+            if ($oItem->time->format('Ymd') == $date) $aRet[] = $oItem;
+        }
+        return $aRet;
     }
 }
 
 /**
- * @property-read string $rowHtml
+ * @property-read My\Team $team1
+ * @property-read My\Team $team2
  */
 class Match {
     use \Nette\SmartObject;
 
     public
         $id,
+        $group,
         $oTeam1,
         $oTeam2,
         $time;
 
-    function __construct($id, $aData) {
+    function __construct($id, $group, $aData) {
         $this->id = $id;
+        $this->group = $group;
         $this->oTeam1 = Teams::getByName($aData[0]);
         $this->oTeam2 = Teams::getByName($aData[1]);
         $this->time = new DateTime($aData[2]);
+    }
+
+    function getTeam1() {
+        return $this->oTeam1;
+    }
+
+    function getTeam2() {
+        return $this->oTeam2;
     }
 }

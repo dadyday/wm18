@@ -1,0 +1,22 @@
+{import 'fragments.latte'}
+
+{block content}
+    <table>
+        <tr>
+            <th></th>
+            <th n:foreach="$teams as $team">
+                {dump $team}
+                {include #teamCol, $team}
+            </th>
+        </tr>
+        <tr n:foreach="$teams as $team2">
+            <th>
+                {include #teamCol, $team2}
+            </th>
+            <td n:foreach="$teams as $team">
+                {if $team2 !== $team}
+                    {include #matchCol, $team2, $team}
+                {/if}
+            </td>
+        </tr>
+    </table>

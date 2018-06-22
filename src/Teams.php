@@ -3,58 +3,33 @@ namespace My;
 
 use Exception;
 
-class Teams extends \ArrayObject {
+class Teams extends Repo {
+    static $oInst;
 
-    static $configFile;
-
-	/** @return \My\Teams */
+    /** @return \My\Teams */
     static function factory($configFile) {
-        static::$configFile = $configFile;
-        return static::instance();
+        return parent::factory($configFile);
     }
 
-    static function instance() {
-        static $oInst = null;
-        if (is_null($oInst)) $oInst = new static();
-        return $oInst;
-    }
+    /** @var \My\Countries @inject */
+    public $oCountries;
 
-    static function __callStatic($name, $args) {
-        $oInst = static::instance();
-        return call_user_func_array([$oInst, '_'.$name], $args);
-    }
-
-    protected
-        $aList = [];
-
-    function __construct() {
-        if (!static::$configFile) throw new Exception('Teams::$configFile is not set');
-        if (!file_exists(static::$configFile)) throw new Exception(static::$configFile." not found");
-
-        $oData = new Data();
-        $aList = [];
-
-        $rank = 1;
-        foreach ($oData->load(static::$configFile) as $aData) {
-            $oTeam = new Team($aData[2], $aData[3]);
-            $oTeam->rank = $rank++;
-            $oTeam->setScore($aData);
-            $aList[$oTeam->short] = $oTeam;
-        }
-
-        parent::__construct($aList);
+    function loadData(&$aList, $i, $aScore) {
+        $oTeam = new Team($aScore[2], $aScore[3]);
+        $oTeam->rank = $i+1;
+        $oTeam->setScore($aScore);
+        $aList[$oTeam->short] = $oTeam;
     }
 
     protected function _getByName($name) {
-        foreach ($this as $oTeam) {
-            if ($oTeam->name == $name) return $oTeam;
-        }
-        return null;
+        $oItem = $this->getByProperty('name', $name);
+        if (is_null($oItem)) throw new \UnexpectedValueException("team $name not found");
+        return $oItem;
     }
 }
 
 /**
- * @property-read string $html
+ * @property-read \My\Country $country
  * @property-read string $flag
  */
 class Team {
@@ -63,24 +38,24 @@ class Team {
     public
         $short,
         $name,
-        $oCountry,
+        $country,
 
-		$rank,
+        $rank,
 
-		$matches,
-		$wins,
-		$ties,
-		$lost,
-		$score,
+        $matches,
+        $wins,
+        $ties,
+        $lost,
+        $score,
 
-		$goal,
-		$anti,
-		$diff;
+        $goal,
+        $anti,
+        $diff;
 
     function __construct($short, $name) {
         $this->short = strtolower($short);
         $this->name = $name;
-        $this->oCountry = Countries::getByName($name);
+        $this->country = Countries::getByName($name);
     }
 
     function setScore($aScore) {

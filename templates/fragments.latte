@@ -1,48 +1,48 @@
-{define groupRows, $oGroups}
+{define groupRows, $groups}
 
-    {foreach $oGroups as $oGroup}
+    {foreach $groups as $group}
         <tr>
             <td></td>
-            <th colspan="3">{$oGroup->name}</th>
+            <th colspan="3">{$group->name}</th>
         </tr>
-        {include #matchRows, $oGroup->oMatches}
+        {include #matchRows, $group->matches}
     {/foreach}
 
 {/define}
 
-{define matchRows, $oMatches}
+{define matchRows, $matches}
 
-    {foreach $oMatches as $oMatch}
-        {include #matchRow, $oMatch}
+    {foreach $matches as $match}
+        {include #matchRow, $match}
     {/foreach}
 
 {/define}
 
-{define matchRow, $oMatch}
+{define matchRow, $match}
 
     <tr>
-        <td style="width:8rem">{$oMatch->time|date:"D, d.m H:i"}</td>
-        <td style="width:8rem">{include #team, $oMatch->oTeam1}</td>
+        <td style="width:8rem">{$match->time|date:"D, d.m H:i"}</td>
+        <td style="width:8rem">{include #team, $match->team1}</td>
         <td style="width:1rem">vs.</td>
-        <td style="width:8rem">{include #team, $oMatch->oTeam2, true}</td>
+        <td style="width:8rem">{include #team, $match->team2, true}</td>
         <td>&nbsp;</td>
-        <td>{include #matchCol, $oMatch->oTeam1, $oMatch->oTeam2}</td>
+        <td>{include #matchCol, $match->team1, $match->team2}</td>
     </tr>
 
 {/define}
 
-{define team, $oTeam, $right}
+{define team, $team, $right}
 
-    <div style="text-align: {$right ? 'left' : 'right'}">
-        {if $right}{include #country, $oTeam->oCountry}{/if}
-        <span>{$oTeam->name}</span>
-        {if !$right}{include #country, $oTeam->oCountry}{/if}
+    <div style="display:inline-block; text-align: {$right ? 'left' : 'right'}">
+        {if $right}{include #country, $team->country}{/if}
+        <span>{$team->name}</span>
+        {if !$right}{include #country, $team->country}{/if}
     </div>
 
 {/define}
 
-{define country, $oCountry}
-    <span class="flag-icon flag-icon-{$oCountry->code}"></span>
+{define country, $country}
+    <span class="flag-icon flag-icon-{$country->code}"></span>
 {/define}
 
 
@@ -70,23 +70,23 @@
     </div>
 {/define}
 
-{define teamCol, $oTeam}
-	<div class="bar">
-		{$oTeam->name}
-		<div class="bars">
-			{include #winBar, $oTeam->wins, $oTeam->ties, $oTeam->lost}
-			{include #goalBar, $oTeam->goal, $oTeam->anti}
-		</div>
-	</div>
+{define teamCol, $team}
+    <div class="bar">
+        {$team->name}
+        <div class="bars">
+            {include #winBar, $team->wins, $team->ties, $team->lost}
+            {include #goalBar, $team->goal, $team->anti}
+        </div>
+    </div>
 {/define}
 
-{define matchCol, $oTeam1, $oTeam2}
-	{var $oComp = \My\Compare::create($oTeam1, $oTeam2)}
-	<div class="bar">
-		{$oComp->result[0]} : {$oComp->result[1]}
-		<div class="bars">
-			{include #winBar, $oComp->wins, $oComp->ties, $oComp->lost}
-			{include #goalBar, $oComp->goal, $oComp->anti}
-		</div>
-	</div>
+{define matchCol, $team1, $team2}
+    {var $comp = \My\Compare::create($team1, $team2)}
+    <div class="bar">
+        {$comp->result[0]} : {$comp->result[1]}
+        <div class="bars">
+            {include #winBar, $comp->wins, $comp->ties, $comp->lost}
+            {include #goalBar, $comp->goal, $comp->anti}
+        </div>
+    </div>
 {/define}

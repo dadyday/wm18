@@ -18,6 +18,15 @@ application:
 
 services:
     router: App\RouterFactory::createRouter
-    countries: My\Countries::factory(%countryCfg%)
-    teams: My\Teams::factory(%teamCfg%)
-    groups: My\Groups::factory(%groupCfg%)
+    countries:
+        factory: My\Countries::factory(%countryCfg%)
+        inject: yes
+    teams:
+        factory: My\Teams::factory(%teamCfg%)
+        inject: yes
+    matches:
+        factory: My\Matches::factory(%groupCfg%)
+        inject: yes
+    groups:
+        factory: My\Groups::factory(%groupCfg%)
+        inject: yes
