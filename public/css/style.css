@@ -12,6 +12,31 @@
     line-height:0.2rem;
 }
 
-.weekend {
-    color: #600;
+.day {
+    display: block;
+    clear: both;
+}
+.day.weekend * {
+    background-color: #fee;
+}
+.day > div {
+    display: block;
+    float: left;
+    padding: 0.25rem;
+}
+.day > .date {
+    width: 8rem;
+    text-align: right;
+    padding-right: 1rem;
+}
+.match {
+    width: 22rem;
+}
+.match .left,
+.match .right {
+    width: 8rem;
+    display: inline-block;
+}
+.match .left {
+    text-align: right;
 }

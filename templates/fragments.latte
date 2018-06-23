@@ -31,6 +31,17 @@
 
 {/define}
 
+{define matchDiv, $match}
+
+    <div class="match">
+        <span>{$match->time|date:'H:i'}</span>
+        <span class="left">{include #team, $match->team1}</span>
+        <span>vs.</span>
+        <span class="right">{include #team, $match->team2, true}</span>
+    </div>
+
+{/define}
+
 {define team, $team, $right}
 
     <div style="display:inline-block; text-align: {$right ? 'left' : 'right'}">

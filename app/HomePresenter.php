@@ -53,16 +53,41 @@ class HomePresenter extends Nette\Application\UI\Presenter {
     function actionCalendar() {
         $oMatches = $this->oContainer->getByType(\My\Matches::class);
         $aMatch= array_values($oMatches->getAll());
-        $from = $aMatch[0]->time;
+        $from = (clone $aMatch[0]->time)->modify('00:00:00');
         $to = $aMatch[count($aMatch)-1]->time;
         #bdump([$aMatches, $from, $to]);
 
         $this->template->days = [];
-        while ($from < $to) {
+        while ($from <= $to) {
             $oDay = new \stdClass;
-            $oDay->date = $from;
-            $oDay->weekend = $from->format('n') == 1;
-            $oDay->matches = $oMatches->getForDay($from);
+            $oDay->date = clone $from;
+            $oDay->dow = $oDay->date->format('N');
+            $oDay->events = [];
+            $aMatch = $oMatches->getForDay($from);
+            usort($aMatch, function($a, $b) {
+                return $a->time < $b->time ? -1 : (
+                    $a->time > $b->time ? 1 : 0);
+            });
+
+            foreach ($aMatch as $n => $oMatch) {
+                $oEvent = new \stdClass;
+                $oEvent->match = $oMatch;
+                $oEvent->space = 0;
+                $oDay->events[] = $oEvent;
+            }
+            $h = 12;
+            while ($aMatch && count($oDay->events) < 4) {
+                if ($aMatch[0]->time->format('H') <= $h) break;
+                array_unshift($oDay->events, new \stdClass);
+                $oDay->events[0]->match = null;
+                $h += 3;
+            }
+            while (count($oDay->events) < 4) {
+                $oEvent = new \stdClass;
+                $oEvent->match = null;
+                $oDay->events[] = $oEvent;
+            }
+
             $this->template->days[] = $oDay;
             $from->modify('+1 day');
         }

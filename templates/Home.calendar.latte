@@ -1,10 +1,14 @@
 {import 'fragments.latte'}
 
-<div n:foreach="$days as $day" class="day {$day->weekend ? 'weekend'}">
+{block content}
+<div n:foreach="$days as $day" class="day {$day->dow >= 6 ? 'weekend'}">
     <div class="date">{$day->date|date:'D, d.m'}</div>
-    <div class="match" n:foreach="$day->matches as $match">
-        <span>{include #team, $match->team1}</span>
-        <span>vs.</span>
-        <span>{include #team, $match->team2, true}</span>
-    </div>
+    {foreach $day->events as $event}
+        {if $event->match}
+            {include #matchDiv, $event->match}
+        {else}
+            <div class="match">&nbsp;</div>
+        {/if}
+    {/foreach}
 </div>
+{/block}

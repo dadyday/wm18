@@ -29,6 +29,7 @@ class Matches extends Repo {
         foreach ($this->aList as $oItem) {
             if ($oItem->time->format('Ymd') == $date) $aRet[] = $oItem;
         }
+        #bdump($aRet, $date);
         return $aRet;
     }
 }
